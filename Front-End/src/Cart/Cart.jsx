@@ -3,15 +3,31 @@ import '../CartStyles/Cart.css'
 import PageTitle from '../Components/PageTitle'
 import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer'
-import CartItems from './CartItems'
+import CartItem from './CartItem'
 import { useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Cart = () => {
   const {cartItems}=useSelector((state)=>state.cart)
+  const subtotal=cartItems.reduce((acc,item)=>acc+item.price*item.quantity,0)
+  const tax= subtotal*0.18;
+  const shipping= subtotal>1000?0:20;
+  const total=subtotal+tax+shipping;
+  const navigate=useNavigate();
+
+  const checkoutHandler=()=>{
+    navigate(`/login?redirect=/shipping`)
+  }
   return (
-  <>
-  <PageTitle title="Cart"/>
-  <Navbar/>
+    <>
+     <Navbar/>
+     <PageTitle title="Cart"/>
+  {cartItems.length===0?(
+    <div className="empty-cart-container">
+      <p className="empty-cart-message">Your cart is empty</p>
+      <Link to="/products" className='viewProducts'>View Products</Link>
+    </div>
+  ):(<>
    <div className="cart-page">
     <div className="cart-items">
       <div className="cart-items-heading">Your Cart</div>
@@ -23,7 +39,7 @@ const Cart = () => {
           <div className="header-action">Actions</div>
         </div>
         {/*Cart Items  */}
-       {cartItems && cartItems.map(item=><CartItems item={item} key={item.name}/>)}
+       {cartItems && cartItems.map(item=><CartItem item={item} key={item.name}/>)}
       </div>
     </div>
        
@@ -32,23 +48,24 @@ const Cart = () => {
         <h3 className="price-summary-heading">Price Summary</h3>
         <div className="summary-item">
           <p className="summary-label">Subtotal : </p>
-          <div className="summary-value">200/-</div>
+          <div className="summary-value">{subtotal.toFixed(2)}/-</div>
         </div>
         <div className="summary-item">
           <p className="summary-label">Tax (18%) : </p>
-          <div className="summary-value">10/-</div>
+          <div className="summary-value">{tax.toFixed(2)}/-</div>
         </div>
         <div className="summary-item">
           <p className="summary-label">Shipping : </p>
-          <div className="summary-value">50/-</div>
+          <div className="summary-value">{shipping.toFixed(2)}/-</div>
         </div>
         <div className="summary-total">
           <p className="total-label">Total : </p>
-          <div className="Total-value">260/-</div>
+          <div className="Total-value">{total.toFixed(2)}/-</div>
         </div>
-        <button className="checkout-btn">Proceed to CheckOut</button>
+        <button className="checkout-btn" onClick={checkoutHandler}>Proceed to CheckOut</button>
        </div>
    </div>
+  </>)}
   <Footer/>
   </>
   )

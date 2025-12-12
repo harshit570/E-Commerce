@@ -15,6 +15,10 @@ import UpdatePassword from './User/UpdatePassword.jsx'
 import ForgotPassword from './User/ForgotPassword.jsx'
 import ResetPassword from './User/ResetPassword.jsx'
 import Cart from './Cart/Cart.jsx'
+import Shipping from './Cart/Shipping.jsx'
+import OrderConfirm from './Cart/OrderConfirm.jsx'
+import Payment from './Cart/Payment.jsx'
+
 
 
 
@@ -41,6 +45,9 @@ const App = () => {
         <Route path='/password/forgot' element={<ForgotPassword />} />
         <Route path='/reset/:token' element={<ResetPassword />} />
         <Route path='/cart' element={<Cart />} />
+        <Route path='/shipping' element={<ProtectedRoute element={<Shipping />} />} />
+         <Route path='/order/confirm' element={<ProtectedRoute element={<OrderConfirm />} />} />
+          <Route path='/process/payment' element={<ProtectedRoute element={<Payment />} />} />
       </Routes>
       {isAuthenticated && <UserDashboard user={user}/>}
     </Router>

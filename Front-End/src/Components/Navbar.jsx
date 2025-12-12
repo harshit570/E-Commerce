@@ -16,6 +16,7 @@ const Navbar = () => {
   const toggleSearch=()=>setIsSearchOpen(!isSearchOpen);
   const togleMenu=()=>setisMenuOpen(!isMenuOpen);
   const {isAuthenticated}=useSelector(state=>state.user);
+  const {cartItems}=useSelector(state=>state.cart);
  const navigate= useNavigate();
   const handleSearchSubmit=(e)=>{
      e.preventDefault();
@@ -57,7 +58,7 @@ const Navbar = () => {
           <div className="cart-container">
             <Link to="/cart">
             <ShoppingCartIcon/>
-            <span className='cart-badge'>6</span>
+            <span className='cart-badge'>{cartItems.length}</span>
             </Link>
           </div>
           { !isAuthenticated && (
