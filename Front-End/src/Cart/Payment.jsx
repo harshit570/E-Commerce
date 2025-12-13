@@ -4,10 +4,57 @@ import PageTitle from '../Components/PageTitle'
 import Navbar from '../Components/Navbar'
 import Footer from '../Components/Footer'
 import CheckoutPath from './CheckoutPath'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const Payment = () => {
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"))
+  const {user}=useSelector(state=>state.user);
+  const {shippingInfo}=useSelector(state=>state.cart);
+  const navigate=useNavigate();
+  const completePayment = async(amount) => {
+    try{
+    const {data:keyData}=await axios.get('/api/v1/getKey');
+    const {key}=keyData;
+    const {data:orderData}=await axios.post('/api/v1/payment/process',{amount});
+    const {order}=orderData;
+    const options = {
+        key,
+        amount,
+        currency: 'INR',
+        name: 'eShop',
+        description: 'E-Commerce Payment',
+        order_id: order.id,
+        handler:async function(response){
+          const {data}=await axios.post('/api/v1/paymentVerification',{
+            razorpay_payment_id:response.razorpay_payment_id,
+            razorpay_order_id:response.razorpay_order_id,
+            razorpay_signature:response.razorpay_signature
+          })
+          if(data.success){
+            navigate(`/paymentSuccess?reference=${data.reference}`)
+          }else{
+            alert('Payment Verification Failed ! Try Again.')
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact:shippingInfo.phoneNumber,
+        },
+        theme: {
+          color: '#3399cc'
+        },
+      };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+    }catch(error){
+      toast.error(error.message,{position:'top-center',autoClose:2000});
+    }
+  }
   return (
    <>
    <PageTitle title="Payment Processing"/>
@@ -15,7 +62,7 @@ const Payment = () => {
    <CheckoutPath activePath={2}/>
    <div className="payment-container">
     <Link to="/order/confirm" className='payment-go-back'>Go Back</Link>
-    <button className="payment-btn">Pay ({orderInfo.total})/-</button>
+    <button className="payment-btn" onClick={()=>completePayment(orderInfo.total)}>Pay ({orderInfo.total})/-</button>
    </div>
 
    <Footer/>

@@ -18,6 +18,7 @@ import Cart from './Cart/Cart.jsx'
 import Shipping from './Cart/Shipping.jsx'
 import OrderConfirm from './Cart/OrderConfirm.jsx'
 import Payment from './Cart/Payment.jsx'
+import PaymentSuccess from './Cart/PaymentSuccess.jsx'
 
 
 
@@ -48,6 +49,7 @@ const App = () => {
         <Route path='/shipping' element={<ProtectedRoute element={<Shipping />} />} />
          <Route path='/order/confirm' element={<ProtectedRoute element={<OrderConfirm />} />} />
           <Route path='/process/payment' element={<ProtectedRoute element={<Payment />} />} />
+          <Route path='/paymentSuccess' element={<ProtectedRoute element={<PaymentSuccess />} />} />
       </Routes>
       {isAuthenticated && <UserDashboard user={user}/>}
     </Router>
