@@ -21,6 +21,9 @@ import Payment from './Cart/Payment.jsx'
 import PaymentSuccess from './Cart/PaymentSuccess.jsx'
 import MyOrders from './Orders/MyOrders.jsx'
 import OrderDetails from './Orders/OrderDetails.jsx'
+import Dashboard from './Admin/Dashboard.jsx'
+import ProductsList from './Admin/ProductsList.jsx'
+import CreateProduct from './Admin/CreateProduct.jsx'
 
 
 
@@ -54,6 +57,12 @@ const App = () => {
           <Route path='/paymentSuccess' element={<ProtectedRoute element={<PaymentSuccess />} />} />
           <Route path='/orders/user' element={<ProtectedRoute element={<MyOrders />} />} />
           <Route path='/order/:orderId' element={<ProtectedRoute element={<OrderDetails />} />} />
+
+          {/* Admin Routes */}
+           <Route path='/admin/dashboard' element={<ProtectedRoute element={<Dashboard />} adminOnly={true}/>} />
+           <Route path='/admin/products' element={<ProtectedRoute element={<ProductsList />} adminOnly={true}/>} />
+           <Route path='/admin/product/create' element={<ProtectedRoute element={<CreateProduct />} adminOnly={true}/>} />
+
       </Routes>
       {isAuthenticated && <UserDashboard user={user}/>}
     </Router>

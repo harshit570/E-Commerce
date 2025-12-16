@@ -2,16 +2,45 @@
 import HandleError from "../utils/handleError.js";
 import handleAsync from "../Middleware/handleAsync.js";
 import ApiFunctionality from "../utils/ApiFunctionality.js";
+import {v2 as cloudinary} from 'cloudinary'
 
 
- export const createProduct=handleAsync(async(req,res)=>{
-  req.body.user=req.user.id;
-  const product=await Product.create(req.body);
+ export const createProduct = handleAsync(async (req, res, next) => {
+  if (!req.files || !req.files.image) {
+    return next(new HandleError("Product images are required", 400));
+  }
+
+  let images = [];
+  if (Array.isArray(req.files.image)) {
+    images = req.files.image;
+  } else {
+    images.push(req.files.image);
+  }
+
+  const imageLinks = [];
+
+  for (const file of images) {
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      folder: "products",
+    });
+
+    imageLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
+
+  req.body.images = imageLinks;
+  req.body.user = req.user.id;
+
+  const product = await Product.create(req.body);
+
   res.status(201).json({
-    success:true,
-    product
-  })
- })
+    success: true,
+    product,
+  });
+});
+
 
  export const getAllProducts=handleAsync(async (req,res,next)=>{
   const resultPerPage=4;
