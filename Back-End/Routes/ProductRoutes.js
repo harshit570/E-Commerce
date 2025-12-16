@@ -17,7 +17,7 @@ Router.route("/admin/product/:id")
 .delete(verifyUserAuth,roleBasedAccess("admin"),deleteProduct)
 
 Router.route('/product/:id').get(getSingleProduct);
-Router.route('/review').post(verifyUserAuth,createProductReview);
+Router.route('/review').put(verifyUserAuth,createProductReview);
 Router.route('/reviews').get(getProductReviews).delete(verifyUserAuth,deleteReview);
 
 

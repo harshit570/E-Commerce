@@ -5,14 +5,14 @@ import { useSelector } from "react-redux";
 const Pagination = ({
   currentPage,
   onPageChange,
+  totalPages,
   activeClass = "active",
   nextPageText = "Next",
   prevPageText = "Prev",
   firstPageText = "1st",
   lastPageText = "Last",
 }) => {
-  const { totalPages, products } = useSelector((state) => state.product);
-  if (products.length === 0 || totalPages <= 1) return null;
+  if (totalPages <= 1) return null;
 
   // Generate Page Number
   const getPageNumber = () => {

@@ -70,7 +70,7 @@
 }
 
 .status-tag.cancelled {
-  color: #dc3545;
+  color: #dd1a2e;
   background: rgba(220, 53, 69, 0.2);
 }
 
@@ -86,7 +86,7 @@
 }
 
 .pay-tag.not-paid {
-  color: #dc3545;
+  color: #e72135;
   background: rgba(220, 53, 69, 0.2);
 }
 

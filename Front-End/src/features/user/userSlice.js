@@ -8,8 +8,7 @@ export const register=createAsyncThunk('user/register',async(userData,{rejectWit
     const config={
       headers:{
         'Content-Type':'multipart/form-data'
-      }
-      
+      }  
     }
     const {data}=await axios.post('api/v1/register',userData,config)
     return data;
@@ -46,7 +45,7 @@ export const loadUser=createAsyncThunk('user/loadUser',async(_,{rejectWithValue}
 // logout
 export const logout=createAsyncThunk('user/logout',async(_,{rejectWithValue})=>{
   try{
-       const {data}=await axios.post('api/v1/logout',{withCredentials:true});
+       const {data}=await axios.post('/api/v1/logout',{withCredentials:true});
        return data;
   }catch(error){
     return rejectWithValue(error.response?.data || 'Logout Failed');

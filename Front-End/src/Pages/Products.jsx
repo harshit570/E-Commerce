@@ -13,7 +13,7 @@ import NoProducts from "../Components/NoProducts";
 import Pagination from "../Components/Pagination";
 
 const Products = () => {
-  const { loading, error, products,resultPerPage,productCount } = useSelector((state) => state.product);
+  const { loading, error, products,resultPerPage,productCount,totalPages } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -24,12 +24,16 @@ const Products = () => {
   const navigate=useNavigate();
   const categories=['laptop','mobile','tv','fruits','glass'];
 
+   useEffect(() => {
+    setCurrentPage(1);
+  }, [category, keyword]);
+
   useEffect(() => {
     dispatch(getProduct({ keyword ,page:currentPage,category})); 
   }, [dispatch, keyword,currentPage,category]);
   useEffect(() => {
     if (error) {
-      toast.error(error.message, { position: "top-center", autoClose: 2000 });
+      toast.error(error, { position: "top-center", autoClose: 2000 });
       dispatch(removeErrors());
     }
   }, [dispatch, error]);
@@ -88,6 +92,7 @@ const Products = () => {
               )}
               <Pagination  
               currentPage={currentPage}
+              totalPages={totalPages}
               onPageChange={handlePageChange}/>
             </div>
           </div>

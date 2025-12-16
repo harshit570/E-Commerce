@@ -25,7 +25,7 @@ export const createOrder=handleAsync(async(req,res,next)=>{
   })
 });
 
-// Get Single Order Admin
+// Get Single Order 
 export const getSingleOrder=handleAsync(async(req,res,next)=>{
   const order=await Order.findById(req.params.id).populate("user","name email");
 
