@@ -71,7 +71,7 @@ const OrderConfirm = () => {
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="product-image"
+                      className="order-product-image"
                     />
                   </td>
                   <td>{item.name}</td>

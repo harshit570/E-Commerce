@@ -6,12 +6,12 @@ import Footer from "../Components/Footer";
 import { Link } from "react-router-dom";
 import { Delete, Edit } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdminProducts, removeErrors } from "../features/admin/adminSlice";
+import { deleteProduct, fetchAdminProducts, removeErrors, removeSuccess } from "../features/admin/adminSlice";
 import Loader from '../Components/Loader'
 import { toast } from 'react-toastify'
 
 const ProductsList = () => {
-  const {products,loading,error}=useSelector(state=>state.admin);
+  const {products,loading,error,deleting}=useSelector(state=>state.admin);
   console.log(products)
   const dispatch=useDispatch();
   useEffect(()=>{
@@ -30,6 +30,17 @@ const ProductsList = () => {
         <p className="no-admin-products">No Products Found</p>
       </div>
     )
+  }
+  const handleDelete=(productId)=>{
+    const isConfirmed=window.confirm('Are You Sure You Want to Delete This Product?')
+    if(isConfirmed){
+      dispatch(deleteProduct(productId)).then((action)=>{
+        if(action.type==='admin/deleteProduct/fulfilled'){
+          toast.success("Product Deleted Successfully",{position:'top-center',autoClose:2000})
+          dispatch(removeSuccess())
+        }
+      })
+    }
   }
   return (
     <>
@@ -58,7 +69,7 @@ const ProductsList = () => {
               <tr key={product._id}>
               <td>{index+1}</td>
               <td><img src={product.images[0].url} alt={product.name} className="admin-product-image"/></td>
-              <td>{product.image}</td>
+              <td>{product.name}</td>
               <td>{product.price}/-</td>
               <td>{product.ratings}</td>
               <td>{product.category}</td>
@@ -66,7 +77,7 @@ const ProductsList = () => {
               <td>{new Date(product.createdAt).toLocaleString()}</td>
               <td>
                 <Link to={`/admin/product/${product._id}`} className="action-icon edit-icon"><Edit/></Link>
-                <Link to={`/admin/product/${product._id}`} className="action-icon delete-icon"><Delete/></Link>
+                <button className="action-icon delete-icon" disabled={deleting[product._id]} onClick={()=>handleDelete(product._id)}>{deleting[product._id]?<Loader/>:<Delete/>}</button>
               </td>
             </tr>
           ))}

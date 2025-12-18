@@ -12,7 +12,6 @@ export const registerUser = handleAsync(async (req, res, next) => {
   if (!req.files || !req.files.avatar) {
     return next(new HandleError("Avatar file is required", 400));
   } 
-
   const avatarFile = req.files.avatar;
   const myCloud=await cloudinary.uploader.upload(avatarFile.tempFilePath,{
     folder:'avatars',
@@ -220,20 +219,29 @@ export const updateUserRole=handleAsync(async(req,res,next)=>{
   }
   res.status(200).json({
     success:true,
-    message:"User role updated Successfully",
     user
   })
 })
 
-// Delete user --Admin
-export const deleteUser=handleAsync(async(req,res,next)=>{
-  const user=await User.findByIdAndDelete(req.params.id);
-  if(!user){
-    return next(new HandleError(`user not found with this id ${req.params.id}`,404));
+// Delete user --Admin (WITH Cloudinary cleanup)
+export const deleteUser = handleAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(
+      new HandleError(`user not found with this id ${req.params.id}`, 404)
+    );
   }
+
+  // 🔥 Delete avatar from Cloudinary
+  if (user.avatar && user.avatar.public_id) {
+    await cloudinary.uploader.destroy(user.avatar.public_id);
+  }
+
+  await user.deleteOne();
+
   res.status(200).json({
-    success:true,
-    message:"User deleted Successfully",
-    user
-  })
-})
+    success: true,
+    message: "User deleted Successfully",
+  });
+});

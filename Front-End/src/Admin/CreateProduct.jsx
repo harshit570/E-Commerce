@@ -19,7 +19,29 @@ const CreateProduct = () => {
   const [image, setImage] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
 
-  const categories = ["glass", "mobile", "dress", "tv","Pant"];
+  const categories = ["mobile",
+    "fruits",
+    "laptop",
+    "shirt",
+    "shoes",
+    "pant",
+    "glass",
+    "Watch",
+    "Cookies",
+    "pomegranate",
+    "socks",
+    "bag",
+    "mouse",
+    "headphone",
+    "bucket",
+    "bangle",
+    "ring",
+    "LCD",
+    "glass",
+     "dress",
+      "tv",
+      "Pant"
+    ];
 
   const createProductSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +64,7 @@ const CreateProduct = () => {
     setImagePreview([])
 
     files.forEach((file) => {
-    setImage((old) => [...old, file]); // 👈 File object
+    setImage((old) => [...old, file]);
     setImagePreview((old) => [...old, URL.createObjectURL(file)]);
     });
   }
@@ -55,6 +77,14 @@ const CreateProduct = () => {
     if(success){
       toast.success("Product Created SuccessFully",{position:'top-center',autoClose:2000})
       dispatch(removeSuccess())
+      setName("")
+      setCategory("")
+      setDescription("")
+      setPrice("")
+      setName("")
+      setStock("")
+      setImage([])
+      setImagePreview([])
     }
   },[error,dispatch,success])
   return (
@@ -103,8 +133,8 @@ const CreateProduct = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">Choose a Category</option>
-            {categories.map((item) => (
-              <option value={item} key={item}>
+            {categories.map((item,index) => (
+              <option value={item} key={index+1}>
                 {item}
               </option>
             ))}

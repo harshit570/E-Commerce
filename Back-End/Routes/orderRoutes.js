@@ -12,7 +12,7 @@ router.route("/admin/order/:id")
 .put(verifyUserAuth,roleBasedAccess("admin"), updateOrderStatus)
 .delete(verifyUserAuth,roleBasedAccess("admin"), deleteOrder);
 
-router.route("/admin/order")
+router.route("/admin/orders")
 .get(verifyUserAuth,roleBasedAccess("admin"), getAllOrders);
 
 router.route("/orders/user")

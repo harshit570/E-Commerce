@@ -72,30 +72,70 @@ import {v2 as cloudinary} from 'cloudinary'
   });
 })
 
-export const updateProduct= handleAsync(async(req,res,next)=>{
-  const product=await Product.findByIdAndUpdate(req.params.id,req.body,{
-    new:true,
-    runValidators:true
-  });
-  if(!product){
-   return next(new HandleError("product not found",404));
-  }
-  res.status(200).json({
-    success:true,
-    product
-  })
-})
+// 3️⃣Update Product
+export const updateProduct = handleAsync(async (req, res, next) => {
+  let product = await Product.findById(req.params.id);
 
-export const deleteProduct=handleAsync(async(req,res,next)=>{
-  const product=await Product.findByIdAndDelete(req.params.id)
-  if(!product){
-    return next(new HandleError("product not found",404));
+  if (!product) {
+    return next(new HandleError("product not found", 404));
   }
+  if (req.files && req.files.image) {
+    let images = [];
+
+    if (Array.isArray(req.files.image)) {
+      images = req.files.image;
+    } else {
+      images.push(req.files.image);
+    }
+    for (const img of product.images) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+    const imageLinks = [];
+    for (const file of images) {
+      const result = await cloudinary.uploader.upload(
+        file.tempFilePath,
+        { folder: "products" }
+      );
+
+      imageLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+
+    req.body.images = imageLinks; 
+  }
+  product = await Product.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
   res.status(200).json({
-    success:true,
-    message:"product deleted"
-  }) 
-})
+    success: true,
+    product
+  });
+});
+
+// 4️⃣delete Product
+export const deleteProduct = handleAsync(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return next(new HandleError("product not found", 404));
+  }
+  for (const img of product.images) {
+    await cloudinary.uploader.destroy(img.public_id);
+  }
+  await Product.findByIdAndDelete(req.params.id);
+  res.status(200).json({
+    success: true,
+    message: "product deleted",
+  });
+});
+
 
 export const getSingleProduct=handleAsync(async(req,res,next)=>{
   const product=await Product.findById(req.params.id);

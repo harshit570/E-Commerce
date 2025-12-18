@@ -29,7 +29,7 @@ Router.route("/admin/users").get(
   roleBasedAccess("admin"),
   getAllUsersList
 );
-Router.route("/admin/users/:id")
+Router.route("/admin/user/:id")
   .get(verifyUserAuth, roleBasedAccess("admin"), getSingleUserDetails)
   .put(verifyUserAuth, roleBasedAccess("admin"), updateUserRole)
   .delete(verifyUserAuth,roleBasedAccess("admin"),deleteUser)

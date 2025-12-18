@@ -19,11 +19,13 @@ import { addItemsToCart, removeMessage } from "../features/cart/cartSlice";
 const ProductDetails = () => {
   const [quantity,setQuantity]=useState(1);
   const [comment,setComment]=useState("");
+  const [selectedImage,setSelectedImage]=useState("")
   const [userRating, setUserRating] = useState(0);
   const handleRatingChange = (newRating) => {
     setUserRating(newRating);
   };
   const { loading, product, error,reviewSuccess,reviewLoading } = useSelector((state) => state.product);
+  console.log(product)
   const {loading:cartLoading,message,cartItems,error:cartError,success}=useSelector((state)=>state.cart);
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -94,6 +96,11 @@ const ProductDetails = () => {
       dispatch(getProductDetails(id));
     }
    },[reviewSuccess,id,dispatch])
+   useEffect(()=>{
+     if(product && product.images && product.images.length>0){
+     setSelectedImage(product.images[0].url)
+     }
+   },[product])
 
     if (loading) {
     return (
@@ -121,11 +128,15 @@ const ProductDetails = () => {
         <div className="product-detail-container">
           <div className="product-image-container">
             <img
-              src={product.images[0].url.replace("./", "/")}
+              src={selectedImage}
               alt={product?.name}
               className="product-detail-image"
             />
+            {product.images.length>1 && (<div className="product-thumbnails">
+             {product.images.map((img,index)=>(<img src={img.url} alt={`Thumbnail ${index+1}`}className="thumbnail-image" onClick={()=>setSelectedImage(img.url)}/>))}
+            </div>)}
           </div>
+
           <div className="product-info">
             <h2>{product?.name}</h2>
             <p className="product-description">{product.description}</p>
