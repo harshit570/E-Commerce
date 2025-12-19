@@ -102,6 +102,15 @@ export const fetchAllOrders=createAsyncThunk('admin/fetchAllOrders',async(_,{rej
    }
 })
 
+// Delete Order
+export const deleteOrder=createAsyncThunk('admin/deleteOrder',async(id,{rejectWithValue})=>{
+   try{
+    const {data}=await axios.delete(`/api/v1/admin/order/${id}`)
+    return data;
+   }catch(error){
+    return rejectWithValue(error.response?.data||"Failed to Delete Order ")
+   }
+})
 
 const adminSlice=createSlice({
   name:"admin",
@@ -242,6 +251,19 @@ const adminSlice=createSlice({
    }).addCase(fetchAllOrders.rejected,(state,action)=>{
     state.loading=false,
     state.error=action.payload?.message||"Failed to Fetch  Orders"
+   })
+
+  //  Delete Product
+    builder.addCase(deleteOrder.pending,(state)=>{
+    state.loading=true,
+    state.error=null
+   }).addCase(deleteOrder.fulfilled,(state,action)=>{
+     state.loading=false,
+     state.success=action.payload.success,
+     state.message=action.payload.message
+   }).addCase(deleteOrder.rejected,(state,action)=>{
+    state.loading=false,
+    state.error=action.payload?.message||"Failed to Delete Order"
    })
   }
 })
