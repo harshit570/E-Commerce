@@ -45,7 +45,7 @@ export const loadUser=createAsyncThunk('user/loadUser',async(_,{rejectWithValue}
 // logout
 export const logout=createAsyncThunk('user/logout',async(_,{rejectWithValue})=>{
   try{
-       const {data}=await axios.post('/api/v1/logout',{withCredentials:true});
+       const {data}=await axios.post('/api/v1/logout');
        return data;
   }catch(error){
     return rejectWithValue(error.response?.data || 'Logout Failed');
@@ -59,7 +59,7 @@ export const updateProfile=createAsyncThunk('user/updateProfile',async(userData,
       headers:{
         'Content-Type':'multipart/form-data'
       },
-      withCredentials:true,
+      // withCredentials:true,
     };
        const {data}=await axios.put('/api/v1/profile/update',userData,config);
        return data;
