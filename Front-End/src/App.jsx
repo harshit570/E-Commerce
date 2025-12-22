@@ -28,6 +28,8 @@ import UpdateProduct from './Admin/UpdateProduct.jsx'
 import UsersList from './Admin/UsersList.jsx'
 import UpdateRole from './Admin/UpdateRole.jsx'
 import OrdersList from './Admin/OrdersList.jsx'
+import UpdateOrder from './Admin/UpdateOrder.jsx'
+import ReviewsList from './Admin/ReviewsList.jsx'
 
 
 
@@ -36,7 +38,7 @@ const App = () => {
   const {isAuthenticated,user}=useSelector(state=>state.user)
   const dispatch=useDispatch();
   useEffect(()=>{
-    if(isAuthenticated){
+    if(!isAuthenticated){
       dispatch(loadUser())
     }
   },[dispatch])
@@ -70,6 +72,8 @@ const App = () => {
            <Route path='/admin/users' element={<ProtectedRoute element={<UsersList />} adminOnly={true}/>} />
            <Route path='/admin/user/:userId' element={<ProtectedRoute element={<UpdateRole />} adminOnly={true}/>} />
            <Route path='/admin/orders' element={<ProtectedRoute element={<OrdersList />} adminOnly={true}/>} />
+           <Route path='/admin/order/:orderId' element={<ProtectedRoute element={<UpdateOrder />} adminOnly={true}/>} />
+           <Route path='/admin/reviews' element={<ProtectedRoute element={<ReviewsList />} adminOnly={true}/>} />
 
       </Routes>
       {isAuthenticated && <UserDashboard user={user}/>}

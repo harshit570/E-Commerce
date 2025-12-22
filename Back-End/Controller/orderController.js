@@ -88,10 +88,10 @@ export const updateOrderStatus=handleAsync(async(req,res,next)=>{
     order
   })
 })
-async function updateQuantity(id,quantity,next){
+async function updateQuantity(id,quantity){
   const product=await Product.findById(id);
   if(!product){
-   return next(new HandleError("Product not found",404));
+   throw new Error("Product not found");
   }
   if(product.stock>0&& product.stock>=quantity){
     product.stock-=quantity;

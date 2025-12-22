@@ -213,8 +213,8 @@ const userSlice= createSlice({
       state.user=null
       state.isAuthenticated=false
       localStorage.removeItem('user');
-      localStorage.removeItem('isAuthenticated');
-   
+      localStorage.removeItem('isAuthenticated');  
+      
     })
     .addCase(logout.rejected,(state,action)=>{
       state.loading=false,
