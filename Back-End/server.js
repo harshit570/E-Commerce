@@ -2,7 +2,9 @@
 import app from './app.js';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
-dotenv.config({ path: "Back-End/config/config.env" });
+if(process.env.NODE_ENV!=='PRODUCTION'){
+dotenv.config({path:"Back-End/config/config.env"});
+}
 import {v2 as cloudinary} from 'cloudinary'
 import Razorpay from 'razorpay';
 connectDB();
