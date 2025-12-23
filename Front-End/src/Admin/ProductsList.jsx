@@ -12,7 +12,6 @@ import { toast } from 'react-toastify'
 
 const ProductsList = () => {
   const {products,loading,error,deleting}=useSelector(state=>state.admin);
-  console.log(products)
   const dispatch=useDispatch();
   useEffect(()=>{
     dispatch(fetchAdminProducts())

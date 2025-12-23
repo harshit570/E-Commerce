@@ -10,7 +10,6 @@ export const createOrder=createAsyncThunk('order/createOrder',async(order,{rejec
       }
      }
      const {data}=await axios.post('/api/v1/new/order',order,config);
-     console.log('Order Data',data);
      return data;
   }catch(error){
      return rejectWithValue(error.response?.data ||'Order Creation Failed');
@@ -32,7 +31,6 @@ export const getAllMyOrders=createAsyncThunk('order/getAllMyOrders',async(_,{rej
 export const getOrderDetails=createAsyncThunk('order/getOrderDetails',async(orderID,{rejectWithValue})=>{
   try{
      const {data}=await axios.get(`/api/v1/order/${orderID}`);
-     console.log('Order Data',data);
      return data;
   }catch(error){
      return rejectWithValue(error.response?.data ||'Failed to fetch order details');

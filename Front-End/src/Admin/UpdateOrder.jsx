@@ -16,7 +16,6 @@ const UpdateOrder = () => {
   const {order,loading:orderLoading}=useSelector(state=>state.order)
   const {success,loading:adminLoading,error}=useSelector(state=>state.admin)
   const loading=orderLoading||adminLoading
-  console.log(order)
   const dispatch=useDispatch();
   useEffect(()=>{
     if(orderId){
