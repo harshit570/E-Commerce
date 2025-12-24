@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import '../UserStyles/profile.css'
+import '../UserStyles/Profile.css'
 import PageTitle from "../Components/PageTitle";
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
