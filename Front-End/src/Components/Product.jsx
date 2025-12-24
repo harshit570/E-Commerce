@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import '../componentStyles/Product.css'
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
-import { set } from 'mongoose';
 
 const Product = ({ product }) => {
   const [rating, setRating] =useState(0);
